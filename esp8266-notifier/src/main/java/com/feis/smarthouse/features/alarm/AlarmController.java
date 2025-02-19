@@ -11,6 +11,7 @@ import java.util.Map;
 
 import com.feis.smarthouse.common.dto.ResponseDto;
 import com.feis.smarthouse.common.interfaces.EndpointsRegister;
+import com.feis.smarthouse.common.util.AppEndpoint;
 import com.feis.smarthouse.common.util.Environment;
 import com.feis.smarthouse.features.notifier.MailNotifier;
 import com.feis.smarthouse.features.notifier.interfaces.Notifier;
@@ -19,10 +20,11 @@ import io.javalin.Javalin;
 import io.javalin.http.Handler;
 
 public class AlarmController implements EndpointsRegister {
+    private final String BASE_URL = AppEndpoint.BASE_V1_ENDPOINT.getUrl() + AppEndpoint.ALARM.getUrl();
+
     @Override
     public void registerEndpoints(Javalin app) {
-        // TODO: move "/api/v1" prefix outta here for reusability
-        app.get("/api/v1/alarm", triggeredAlarm());
+        app.get(BASE_URL, triggeredAlarm());
     }
 
     // TODO: REFACTOR
