@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Properties;
 
+import com.feis.smarthouse.common.exceptions.NotificationSendingException;
 import com.feis.smarthouse.common.util.Environment;
 
 import jakarta.mail.Message;
@@ -71,16 +72,15 @@ public class MailSender {
      *                     {@code Null}
      *                     or {@code ""} to disable the feature)
      * @param allowReplies Whether to allow replies to the email
-     * @throws EmailSendingException If there is an error sending the email
+     * @throws NotificationSendingException If there is an error sending the email
      */
     public void deliverMessage(String recipient, String subject, String plainText, String htmlContent,
-            boolean allowReplies) throws Exception {
+            boolean allowReplies) throws NotificationSendingException {
         try {
             Message msg = buildMessage(recipient, subject, htmlContent, htmlContent, allowReplies);
             Transport.send(msg);
         } catch (MessagingException e) {
-            throw new Exception("Could not send email", e);
-            // throw new EmailSendingException("Could not send email", e);
+            throw new NotificationSendingException("Could not send email", e);
         }
     }
 
@@ -102,31 +102,25 @@ public class MailSender {
      *                            ({@see jakarta.mail.MessagingException})
      */
     private MimeMessage buildMessage(String recipient, String subject, String textContent, String htmlContent,
-            boolean allowReplies) throws Exception {
-        try {
-
-            MimeMessage msg = new MimeMessage(session);
-            msg.setRecipients(Message.RecipientType.TO, recipient);
-            msg.setFrom(fromName + "<" + configValues.get("USER_EMAIL") + ">");
-            msg.setSubject(subject);
-            msg.setText(textContent);
-            if (!("".equals(htmlContent)) && htmlContent != null)
-                msg.setContent(
-                        "<!DOCTYPE html>"
-                                + "<html lang = \"en\">"
-                                + DEFAULT_HTML_HEAD
-                                + "<body>"
-                                + htmlContent
-                                + "</body>"
-                                + "</html>",
-                        "text/html");
-            if (allowReplies) {
-                msg.setReplyTo(InternetAddress.parse(configValues.get("USER_EMAIL")));
-            }
-            return msg;
-        } catch (MessagingException e) {
-            throw new Exception("Error while sending email", e);
-            // throw new EmailSendingException("Error while building email", e);
+            boolean allowReplies) throws MessagingException {
+        MimeMessage msg = new MimeMessage(session);
+        msg.setRecipients(Message.RecipientType.TO, recipient);
+        msg.setFrom(fromName + "<" + configValues.get("USER_EMAIL") + ">");
+        msg.setSubject(subject);
+        msg.setText(textContent);
+        if (!("".equals(htmlContent)) && htmlContent != null)
+            msg.setContent(
+                    "<!DOCTYPE html>"
+                            + "<html lang = \"en\">"
+                            + DEFAULT_HTML_HEAD
+                            + "<body>"
+                            + htmlContent
+                            + "</body>"
+                            + "</html>",
+                    "text/html");
+        if (allowReplies) {
+            msg.setReplyTo(InternetAddress.parse(configValues.get("USER_EMAIL")));
         }
+        return msg;
     }
 }
