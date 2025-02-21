@@ -80,7 +80,7 @@ public class MailSender {
             Message msg = buildMessage(recipient, subject, htmlContent, htmlContent, allowReplies);
             Transport.send(msg);
         } catch (MessagingException e) {
-            throw new NotificationSendingException("Could not send email", e);
+            throw new NotificationSendingException("Error while sending Email notification", e);
         }
     }
 
