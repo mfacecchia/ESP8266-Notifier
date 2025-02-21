@@ -30,7 +30,8 @@ public class AlarmController implements EndpointsRegister {
     // TODO: REFACTOR
     private Handler triggeredAlarm() {
         return (ctx) -> {
-            // TODO: Make offset parsing dynamic based on client's tz
+            // TODO: Make offset parsing dynamic based on client's tz (currently
+            // server-based)
             OffsetDateTime triggeredAt = Instant.now().atOffset(ZoneOffset.ofHours(1));
             String formatted = triggeredAt.format(DateTimeFormatter.ofPattern("dd/MM/yyy 'at' kk:mm:ss O"));
             List<Notifier> notifiers = new ArrayList<>(Arrays.asList(new MailNotifier()));

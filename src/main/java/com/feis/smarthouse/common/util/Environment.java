@@ -23,6 +23,7 @@ public class Environment {
      * @return a Map representing the env variables key-value pair
      */
     public static Map<String, String> getEnvironmentVariables(List<String> variablesName) {
+        // TODO: Use `System.getenv()` method
         Dotenv dotenv = Dotenv.load();
         Map<String, String> env = new HashMap<>();
         for (String name : variablesName) {

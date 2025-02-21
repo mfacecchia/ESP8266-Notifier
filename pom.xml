@@ -5,10 +5,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.feis.smarthouse</groupId>
-  <artifactId>esp8266-notifier</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <artifactId>ESP8266-Notifier</artifactId>
+  <version>1.0</version>
 
-  <name>esp8266-notifier</name>
+  <name>ESP8266-Notifier</name>
   <url>https://feis.vercel.app</url>
 
   <properties>
