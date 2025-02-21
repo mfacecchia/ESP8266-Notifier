@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.feis.smarthouse.common.dto.ResponseDto;
+import com.feis.smarthouse.common.exceptions.AppException;
 import com.feis.smarthouse.common.interfaces.EndpointsRegister;
 
 import io.javalin.Javalin;
@@ -67,6 +68,7 @@ public class AppBuilder {
             addTestEndpoint();
         }
         setEndpointNotFoundHandler();
+        setAppExceptionsHandler();
         setAppGenericExceptionsHandler();
         logger.info("Done");
     }
@@ -124,6 +126,27 @@ public class AppBuilder {
             logger.info("Unexpected Exception thrown during execution: ", e);
             ResponseDto<?> response = new ResponseDto<>(STATUS_CODE,
                     "An unexpected error occurred. Please try again later.", null);
+            ctx.status(STATUS_CODE).json(response);
+        });
+    }
+
+    /**
+     * Adds custom {@code AppException}s handling with the specified HTTP status and
+     * message using {@link com.feis.eduhub.backend.common.dto.ResponseDto Response}
+     * format.
+     * 
+     * @see ResponseDto
+     * @see AppException
+     * @see ExceptionHandler
+     */
+    private void setAppExceptionsHandler() {
+        app.exception(AppException.class, (e, ctx) -> {
+            final int STATUS_CODE = e.getStatusCode();
+            logger.info("------");
+            logger.info("[INFO]");
+            logger.info("------");
+            logger.info("Custom App Exception thrown during execution: ", e);
+            ResponseDto<?> response = new ResponseDto<>(STATUS_CODE, e.getMessage(), null);
             ctx.status(STATUS_CODE).json(response);
         });
     }
