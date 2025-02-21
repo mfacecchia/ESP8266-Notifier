@@ -116,7 +116,6 @@ public class AppBuilder {
      * @see ResponseDto
      * @see ExceptionHandler
      */
-    // TODO: Add custom app exceptions handler
     private void setAppGenericExceptionsHandler() {
         app.exception(Exception.class, (e, ctx) -> {
             final int STATUS_CODE = 400;
