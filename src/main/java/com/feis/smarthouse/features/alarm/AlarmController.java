@@ -39,7 +39,7 @@ public class AlarmController implements EndpointsRegister {
                     .getEnvironmentVariables(Arrays.asList("EMAIL_NOTIFY_TO"));
             for (Notifier notifier : notifiers) {
                 notifier.send(notificationOptions.get("EMAIL_NOTIFY_TO"), "Alarm Triggered",
-                        String.format("A motion has been detected on %s", formatted));
+                        String.format("A motion was detected on %s", formatted));
             }
             final int STATUS_CODE = 200;
             ResponseDto<?> response = new ResponseDto<>(STATUS_CODE, "Notification sent", null);
